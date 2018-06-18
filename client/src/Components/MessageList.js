@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import Message from './Message';
 
 const MessageList = (props) => {
-  const messageNodes = props.data.map(comment => (
+  const messageNodes = props.data.map(message => (
     <Message
-      key={comment._id}
-      id={comment._id}
-      author={comment.author}
-      text={comment.text}
-      timestamp={comment.updatedAt}
-      handleUpdateComment={props.handleUpdateComment}
-      handleDeleteComment={props.handleDeleteComment}
+      key={message._id}
+      id={message._id}
+      author={message.author}
+      text={message.text}
+      timestamp={message.updatedAt}
+      handleUpdateMessage={props.handleUpdateMessage}
+      handleDeleteMessage={props.handleDeleteMessage}
     />
   ));
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const MessageForm = props => (
-  <form onSubmit={props.submitComment} className="input-group">
+  <form onSubmit={props.submitMessage} className="input-group">
     <input
       type="text"
       name="author"
@@ -24,7 +24,7 @@ const MessageForm = props => (
 );
 
 MessageForm.propTypes = {
-  submitComment: PropTypes.func.isRequired,
+  submitMessage: PropTypes.func.isRequired,
   handleChangeText: PropTypes.func.isRequired,
   text: PropTypes.string,
   author: PropTypes.string,

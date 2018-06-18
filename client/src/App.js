@@ -36,8 +36,37 @@ class App extends Component {
     this.setState(newState);
   }
 
-  submitComment = (e) => {
+  onUpdateMessage = (id) => {
+    const oldComment = this.state.data.find(c => c._id === id);
+    if (!oldComment) return;
+    this.setState({ author: oldComment.author, text: oldComment.text, updateId: id });
+  }
+
+  onDeleteMessage = (id) => {
+    const i = this.state.data.findIndex(c => c._id === id);
+    const data = [
+      ...this.state.data.slice(0, i),
+      ...this.state.data.slice(i + 1),
+    ];
+    this.setState({ data });
+    fetch(`api/comments/${id}`, { method: 'DELETE' })
+      .then(res => res.json()).then((res) => {
+        if (!res.success) this.setState({ error: res.error });
+      });
+  }
+
+  submitMessage = (e) => {
     e.preventDefault();
+    const { author, text, updateId } = this.state;
+    if (!author || !text) return;
+    if (updateId) {
+      this.submitUpdatedMessage();
+    } else {
+      this.submitNewMessage();
+    }
+  }
+
+  submitNewMessage = () => {
     const { author, text } = this.state;
     const data = [...this.state.data, { author, text, _id: Date.now().toString() }];
     this.setState({ data });
@@ -48,6 +77,18 @@ class App extends Component {
     }).then(res => res.json()).then((res) => {
       if (!res.success) this.setState({ error: res.error.message || res.error });
       else this.setState({ author: '', text: '', error: null });
+    });
+  }
+
+  submitUpdatedMessage = () => {
+    const { author, text, updateId } = this.state;
+    fetch(`/api/comments/${updateId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ author, text }),
+    }).then(res => res.json()).then((res) => {
+      if (!res.success) this.setState({ error: res.error.message || res.error });
+      else this.setState({ author: '', text: '', updateId: null });
     });
   }
 
@@ -63,11 +104,13 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-      <header>Liberty Chat App</header>
+      <header>Liberty Mutual CRUDchat</header>
       <section className="container">
         <div className="messages">
           <MessageList
             data={this.state.data}
+            handleDeleteMessage={this.onDeleteMessage}
+            handleUpdateMessage={this.onUpdateMessage}
           />
         </div>
         <div className="form">
@@ -75,7 +118,7 @@ class App extends Component {
             author={this.state.author}
             text={this.state.text}
             handleChangeText={this.onChangeText}
-            submitComment={this.submitComment}
+            submitMessage={this.submitMessage}
           />
         </div>
       </section>
