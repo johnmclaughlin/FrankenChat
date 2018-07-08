@@ -26,6 +26,9 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+  }
 
 io.on('connection', socket => {
     console.log('User connected')
