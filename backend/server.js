@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server)
 
-const API_PORT = 3001;
+const API_PORT = process.env.PORT || 3001;
 
 mongoose.connect(config.mongoURL, (error) => {
   if (error) {
