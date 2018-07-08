@@ -24,11 +24,21 @@ header {
   align-items: center;
   justify-content: space-between;
 
+  .wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%
+  }
+
+  .users {
+    width: 20%;
+  }
+
   .messages {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
     width: 75%;
-    max-width: 700px;
-    min-width: 300px;
 
     .message {
       padding: 10px 20px;

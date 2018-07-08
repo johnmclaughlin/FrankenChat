@@ -1,21 +1,72 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
+import socketIOClient from 'socket.io-client';
 import MessageList from './Components/MessageList';
 import MessageForm from './Components/MessageForm';
+import SignIn from './Components/SignIn';
+import Users from './Components/Users';
 
 import './App.css';
 
 class App extends Component {
   constructor() {
     super();
+    this.socket = null;
     this.state = {
       data: [],
       error: null,
       author: '',
       comment: '',
       updateId: null,
+      username : localStorage.getItem('username') ? localStorage.getItem('username') : '',
+      uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID(),
+      chat_ready : false,
+      users : [],
+      messages : [],
+      message : ''
     };
     this.pollInterval = null;
+  }
+
+  generateUID(){
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 15; i++){
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    localStorage.setItem('uid', text);
+    return text;
+  }
+
+  setUsername(username, e){
+      this.setState({
+          username : username
+      }, () => {
+          this.initChat();
+      });
+  }
+  initChat(){
+    localStorage.setItem('username', this.state.username);
+    this.setState({
+        chat_ready : true,
+    });
+    this.socket = socketIOClient('ws://localhost:3001', {
+        query : 'username='+this.state.username+'&uid='+this.state.uid
+    });
+
+    this.socket.on('updateUsersList', function (users) {
+        console.log(users);
+        this.setState({
+            users : users
+        });
+    }.bind(this));
+
+    this.socket.on('message', function (message) {
+        this.setState({
+            messages : this.state.messages.concat([message])
+        });
+        this.scrollToBottom();
+    }.bind(this));
   }
 
   componentWillMount() {
@@ -49,7 +100,7 @@ class App extends Component {
       ...this.state.data.slice(i + 1),
     ];
     this.setState({ data });
-    fetch(`api/comments/${id}`, { method: 'DELETE' })
+    fetch(`/comments/${id}`, { method: 'DELETE' })
       .then(res => res.json()).then((res) => {
         if (!res.success) this.setState({ error: res.error });
       });
@@ -70,7 +121,7 @@ class App extends Component {
     const { author, text } = this.state;
     const data = [...this.state.data, { author, text, _id: Date.now().toString() }];
     this.setState({ data });
-    fetch('/api/comments', {
+    fetch('/comments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ author, text }),
@@ -82,7 +133,7 @@ class App extends Component {
 
   submitUpdatedMessage = () => {
     const { author, text, updateId } = this.state;
-    fetch(`/api/comments/${updateId}`, {
+    fetch(`/comments/${updateId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ author, text }),
@@ -93,7 +144,7 @@ class App extends Component {
   }
 
   loadCommentsFromServer = () => {
-    fetch('/api/comments')
+    fetch('/comments')
       .then(data => data.json())
       .then((res) => {
         if (!res.success) this.setState({ error: res.error });
@@ -102,25 +153,46 @@ class App extends Component {
   }
 
   render() {
+    const socket = socketIOClient(this.state.endpoint);
+
+    socket.on('change color', (color) => {
+      
+      var y = document.getElementsByClassName('container');
+      var aNode = y[0];
+      aNode.style.backgroundColor = color
+    })
+
     return (
       <React.Fragment>
       <header>Liberty Mutual CRUDchat</header>
       <section className="container">
-        <div className="messages">
-          <MessageList
-            data={this.state.data}
-            handleDeleteMessage={this.onDeleteMessage}
-            handleUpdateMessage={this.onUpdateMessage}
-          />
-        </div>
-        <div className="form">
-          <MessageForm 
-            author={this.state.author}
-            text={this.state.text}
-            handleChangeText={this.onChangeText}
-            submitMessage={this.submitMessage}
-          />
-        </div>
+
+        {this.state.chat_ready ? (
+                    <React.Fragment>
+                      <div className="wrapper">
+                      <Users users={this.state.users}/>
+                      <div className="messages">
+                        <MessageList
+                          data={this.state.data}
+                          handleDeleteMessage={this.onDeleteMessage}
+                          handleUpdateMessage={this.onUpdateMessage}
+                        />
+                      </div>
+                      </div>
+                      <div className="form">
+                        <MessageForm 
+                          author={this.state.author}
+                          text={this.state.text}
+                          handleChangeText={this.onChangeText}
+                          submitMessage={this.submitMessage}
+                        />
+                      </div>
+                    </React.Fragment>
+                ) : (
+                    <SignIn
+                        setUsername={this.setUsername.bind(this)}
+                    />
+                )}
       </section>
       </React.Fragment>
     );

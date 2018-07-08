@@ -2,11 +2,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import http from 'http';
+import socketIO from 'socket.io';
 import config from './config';
 import Comment from './models/comment';
 
 const app = express();
-const router = express.Router();
+// const router = express.Router();
+const server = http.createServer(app);
+const io = socketIO(server)
 
 const API_PORT = 3001;
 
@@ -23,18 +27,85 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Hello, World!' });
-});
+io.on('connection', socket => {
+    console.log('User connected')
 
-router.get('/comments', (req, res) => {
+    socket.on('change color', (color) => {
+        // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
+        // we make use of the socket.emit method again with the argument given to use from the callback function above
+        console.log('Color Changed to: ', color)
+        io.sockets.emit('change color', color)
+      })
+    
+    socket.on('disconnect', () => {
+      console.log('user disconnected')
+    })
+  })
+
+let users = {};
+
+let getUsers = () => {
+    return Object.keys(users).map(function(key){
+        return users[key].username
+    });
+};
+
+let createSocket = (user) => {
+    let cur_user = users[user.uid],
+        updated_user = {
+            [user.uid] : Object.assign(cur_user, {sockets : [...cur_user.sockets, user.socket_id]})
+        };
+    users = Object.assign(users, updated_user);
+};
+
+let createUser = (user) => {
+    users = Object.assign({
+        [user.uid] : {
+            username : user.username,
+            uid : user.uid,
+            sockets : [user.socket_id]
+        }
+    }, users);
+};
+
+let removeSocket = (socket_id) => {
+    let uid = '';
+    Object.keys(users).map(function(key){
+        let sockets = users[key].sockets;
+        if(sockets.indexOf(socket_id) !== -1){
+            uid = key;
+        }
+    });
+    let user = users[uid];
+    if(user.sockets.length > 1){
+        // Remove socket only
+        let index = user.sockets.indexOf(socket_id);
+        let updated_user = {
+            [uid] : Object.assign(user, {
+                sockets : user.sockets.slice(0,index).concat(user.sockets.slice(index+1))
+            })
+        };
+        users = Object.assign(users, updated_user);
+    }else{
+        // Remove user by key
+        let clone_users = Object.assign({}, users);
+        delete clone_users[uid];
+        users = clone_users;
+    }
+};
+
+// server.get('/', (req, res) => {
+//   res.json({ message: 'Hello, World!' });
+// });
+
+app.get('/comments', (req, res) => {
   Comment.find((err, comments) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: comments });
   });
 });
 
-router.post('/comments', (req, res) => {
+app.post('/comments', (req, res) => {
   const comment = new Comment();
   const { author, text } = req.body;
   if (!author || !text) {
@@ -51,7 +122,7 @@ router.post('/comments', (req, res) => {
   });
 });
 
-router.put('/comments/:commentId', (req, res) => {
+app.put('/comments/:commentId', (req, res) => {
   console.log(req.params);
   const { commentId } = req.params;
   if (!commentId) {
@@ -69,7 +140,7 @@ router.put('/comments/:commentId', (req, res) => {
   });
 });
 
-router.delete('/comments/:commentId', (req, res) => {
+app.delete('/comments/:commentId', (req, res) => {
   const { commentId } = req.params;
   if (!commentId) {
     return res.json({ success: false, error: 'No comment id provided' });
@@ -80,5 +151,39 @@ router.delete('/comments/:commentId', (req, res) => {
   });
 });
 
-app.use('/api', router);
-app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
+io.on('connection', (socket) => {
+  let query = socket.request._query,
+      user = {
+          username : query.username,
+          uid : query.uid,
+          socket_id : socket.id
+      };
+
+  if(users[user.uid] !== undefined){
+      createSocket(user);
+      socket.emit('updateUsersList', getUsers());
+  }
+  else{
+      createUser(user);
+      io.emit('updateUsersList', getUsers());
+  }
+
+  socket.on('message', (data) => {
+      console.log(data);
+      socket.broadcast.emit('message', {
+          username : data.username,
+          message : data.message,
+          uid : data.uid
+      });
+  });
+
+  socket.on('disconnect', () => {
+      removeSocket(socket.id);
+      io.emit('updateUsersList', getUsers());
+  });
+});
+
+//app.use('/api', server);
+//app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
+
+server.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`))

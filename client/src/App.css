@@ -20,11 +20,17 @@ header {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: space-between; }
+  .container .wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%; }
+  .container .users {
+    width: 20%; }
   .container .messages {
     overflow: auto;
-    width: 75%;
-    max-width: 700px;
-    min-width: 300px; }
+    display: flex;
+    flex-direction: column;
+    width: 75%; }
     .container .messages .message {
       padding: 10px 20px;
       margin-bottom: 10px;
