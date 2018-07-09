@@ -11,7 +11,7 @@
     "socket.io": "^2.1.1"
   },
   "scripts": {
-    "start:server": "cd backend && nodemon server.js --exec babel-node --presets es2015",
+    "start:server": "cd backend && nodemon server.js",
     "start:client": "cd client && yarn start",
     "start:dev": "concurrently \"yarn start:server\" \"yarn start:client\""
   }

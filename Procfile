@@ -1,1 +1,1 @@
-web: cd backend && node server.js --exec babel-node --presets es2015
+web: cd backend && node server.js
