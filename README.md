@@ -1,5 +1,8 @@
 # FrankenChat
 
-Install dependencies: $ npm install && cd client && npm install && cd ..
+#### MERN stack + Socket.io. Full stack chat application with Socket.io for user presence. 
+1. Clone repository
+2. $ npm install && cd client && npm install && cd ..
+3. $ yarn start:dev
 
-To start everything: $ yarn start:dev
+
