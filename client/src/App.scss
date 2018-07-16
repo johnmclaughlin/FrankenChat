@@ -1,125 +1,242 @@
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css?family=Creepster|Montserrat');
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-header {
+html,body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100%;
   width: 100%;
-  color: #002663;
-  font-size: 36px;
-  padding: 30px 40px 20px 80px;
-  background: #f1c140 url(Assets/Images/liberty_mutual_logo.png) no-repeat 10px 5px;
- }
+  margin : 0px;
+  padding : 0px;
+}
 
-.container {
-  background-color: #f1f1f1;
-  box-sizing: border-box;
-  padding: 0;
-  min-height: 90vh;
-  width: 100vw;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: space-between;
+#root{
+  position:relative;
+  height: 100%;
+  width: 100%;
+  padding-top: 56px;
 
-  .wrapper {
-    display: flex;
-    flex: 1;
-    width: 100%
+  .navbar-brand {
+    font-family: 'Creepster';
+    font-size: 2em;
+
+    img {
+      height: 50px;
+      margin-right: 20px;
+    }
   }
 
-  .users {
-    width: 20%;
+  .enter-chat{
+    display: block;
+    position:relative;
+    height: 100%;
+    width: 100%;
   }
 
-  .messages {
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    width: 75%;
+  .chat{
+    display: block;
+    position:relative;
+    height: 100%;
+    width: 100%;
+    margin-top: 20px;
 
-    .message {
-      padding: 10px 20px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-    
-      &__content {
-        min-width: 100px;
-        background-color: #fff;
-        border-radius: 5px;
+    .users, .messages{
+      padding: 0px;
+      float: left;
+    }
+
+    .users {
+
+      .user{
+        border-bottom : 1px solid #e9ebee;
         padding: 10px;
-        display: inline-flex;
-    
-        & span {
-          margin: 0;
-          padding-right: 10px;
-          color: blue;
-          font-weight: bold;
+
+        &:last-of-type {
+          display: none;
+        }
+
+        .fa-user{
+          color :#343a40;
         }
       }
-    
-      &__buttons {
-        padding-bottom: 5px;
-    
-        & a {
-          margin: 0px 3px;;
-          padding-top: 10px;
-          cursor: pointer;
+    }
+
+    .messages{
+      border-left: 1px solid #e9ebee;
+      overflow:auto;
+      height: 100%;
+
+      .message{
+        padding: 10px;
+        display: block;
+        min-height: 50px;
+        height : auto !important;
+        clear:both;
+
+        &__buttons {
+          padding-bottom: 5px;
+      
+          & a {
+            margin: 0px 3px;;
+            padding-top: 10px;
+            cursor: pointer;
+            font-size: 10px;
+            color: dimgray;
+            letter-spacing: 0.05em;
+          }
+        }
+      
+        .time {
           font-size: 10px;
-          color: dimgray;
-          letter-spacing: 0.05em;
+          padding-left: 5px;
+          padding-right: 5px;
+          color: gray;
+        }
+
+        .username, .data{
+          display: inline-block;
+          float:left;
+          margin-right: 10px;
         }
       }
-    
-      .time {
-        font-size: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        color: gray;
+
+      .no-message{
+        margin: 10px;
       }
     }
-  }
-  
-  .form {
-    width: 70%;
-    min-width: 300px;
-    max-width: 700px;
-  
-    & form {
-      display: flex;
-      padding: 15px 0;
+
+    .chatbox {
+      position:fixed;
+      bottom: 0px;
+      padding: 0px;
     }
-  
-    & input {
-      height: 30px;
-      padding-left: 10px;
-      border: 1px solid gray;
-      margin-right: 10px;
-      flex: 3;
-  
-      &:first-child {
-        flex: 1;
-      }
-    }
-  
-    & button {
-      color: gray;
-      border-radius: 5px;
-      border: 1px solid gray;
-    }
-  
-    &:hover {
-      cursor: pointer;
-      color: blue;
-      border-color: blue;
+
+    .btn-secondary {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 }
+
+// body {
+//   margin: 0;
+//   padding: 0;
+//   font-family: Arial, Helvetica, sans-serif;
+// }
+
+// header {
+//   width: 100%;
+//   color: #002663;
+//   font-size: 36px;
+//   padding: 30px 40px 20px 80px;
+//   background: #f1c140 url(Assets/Images/liberty_mutual_logo.png) no-repeat 10px 5px;
+//  }
+
+// .container {
+//   background-color: #f1f1f1;
+//   box-sizing: border-box;
+//   padding: 0;
+//   min-height: 90vh;
+//   width: 100vw;
+//   display: flex;
+//   flex-flow: column nowrap;
+//   align-items: center;
+//   justify-content: space-between;
+
+//   .wrapper {
+//     display: flex;
+//     flex: 1;
+//     width: 100%
+//   }
+
+//   .users {
+//     width: 20%;
+//   }
+
+//   .messages {
+//     overflow: auto;
+//     display: flex;
+//     flex-direction: column;
+//     width: 75%;
+
+//     .message {
+//       padding: 10px 20px;
+//       margin-bottom: 10px;
+//       display: flex;
+//       flex-direction: column;
+    
+//       &__content {
+//         min-width: 100px;
+//         background-color: #fff;
+//         border-radius: 5px;
+//         padding: 10px;
+//         display: inline-flex;
+    
+//         & span {
+//           margin: 0;
+//           padding-right: 10px;
+//           color: blue;
+//           font-weight: bold;
+//         }
+//       }
+    
+//       &__buttons {
+//         padding-bottom: 5px;
+    
+//         & a {
+//           margin: 0px 3px;;
+//           padding-top: 10px;
+//           cursor: pointer;
+//           font-size: 10px;
+//           color: dimgray;
+//           letter-spacing: 0.05em;
+//         }
+//       }
+    
+//       .time {
+//         font-size: 10px;
+//         padding-left: 5px;
+//         padding-right: 5px;
+//         color: gray;
+//       }
+//     }
+//   }
+  
+//   .form {
+//     width: 70%;
+//     min-width: 300px;
+//     max-width: 700px;
+  
+//     & form {
+//       display: flex;
+//       padding: 15px 0;
+//     }
+  
+//     & input {
+//       height: 30px;
+//       padding-left: 10px;
+//       border: 1px solid gray;
+//       margin-right: 10px;
+//       flex: 3;
+  
+//       &:first-child {
+//         flex: 1;
+//       }
+//     }
+  
+//     & button {
+//       color: gray;
+//       border-radius: 5px;
+//       border: 1px solid gray;
+//     }
+  
+//     &:hover {
+//       cursor: pointer;
+//       color: blue;
+//       border-color: blue;
+//     }
+//   }
+// }
 
 
 

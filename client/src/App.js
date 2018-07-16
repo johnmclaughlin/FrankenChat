@@ -167,42 +167,34 @@ class App extends Component {
     return (
       <React.Fragment>
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-                <a className="navbar-brand" href="#">FrankenChat</a>
-                <button className="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"/>
-                </button>
-
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item float-right">
-                            <a className="nav-link" target="_blank" href="https://github.com/waleedahmad">Github</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-      <section className="container">
+        <a className="navbar-brand" href="#"><img src="images/frankenchat_logo.png" />FrankenChat</a>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item float-right">
+              <a className="nav-link" target="_blank" href="https://github.com/johnmclaughlin/FrankenChat">Github</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <section className="chat">
 
         {this.state.chat_ready ? (
                     <React.Fragment>
-                      <div className="wrapper">
                       <Users users={this.state.users}/>
-                      <div className="messages">
+                      <div className="messages col-xs-12 col-sm-12 col-md-8 col-lg-10" style={{height : this.state.height + 'px'}}>
                         <MessageList
                           data={this.state.data}
                           handleDeleteMessage={this.onDeleteMessage}
                           handleUpdateMessage={this.onUpdateMessage}
                         />
-                      </div>
-                      </div>
-                      <div className="form">
-                        <MessageForm 
-                          author={this.state.author}
-                          text={this.state.text}
-                          handleChangeText={this.onChangeText}
-                          submitMessage={this.submitMessage}
-                        />
+                        <div className="input-group chatbox col-xs-12 col-sm-12 col-md-8 col-lg-10">
+                          <MessageForm 
+                            author={this.state.author}
+                            text={this.state.text}
+                            handleChangeText={this.onChangeText}
+                            submitMessage={this.submitMessage}
+                          />
+                        </div>
                       </div>
                     </React.Fragment>
                 ) : (

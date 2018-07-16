@@ -1,87 +1,78 @@
 @import url(~bootstrap/dist/css/bootstrap.min.css);
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif; }
-
-header {
+@import url("https://fonts.googleapis.com/css?family=Creepster|Montserrat");
+html, body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100%;
   width: 100%;
-  color: #002663;
-  font-size: 36px;
-  padding: 30px 40px 20px 80px;
-  background: #f1c140 url(Assets/Images/liberty_mutual_logo.png) no-repeat 10px 5px; }
+  margin: 0px;
+  padding: 0px; }
 
-.container {
-  background-color: #f1f1f1;
-  box-sizing: border-box;
-  padding: 0;
-  min-height: 90vh;
-  width: 100vw;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: space-between; }
-  .container .wrapper {
-    display: flex;
-    flex: 1;
+#root {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding-top: 56px; }
+  #root .navbar-brand {
+    font-family: 'Creepster';
+    font-size: 2em; }
+    #root .navbar-brand img {
+      height: 50px;
+      margin-right: 20px; }
+  #root .enter-chat {
+    display: block;
+    position: relative;
+    height: 100%;
     width: 100%; }
-  .container .users {
-    width: 20%; }
-  .container .messages {
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    width: 75%; }
-    .container .messages .message {
-      padding: 10px 20px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column; }
-      .container .messages .message__content {
-        min-width: 100px;
-        background-color: #fff;
-        border-radius: 5px;
+  #root .chat {
+    display: block;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin-top: 20px; }
+    #root .chat .users, #root .chat .messages {
+      padding: 0px;
+      float: left; }
+    #root .chat .users .user {
+      border-bottom: 1px solid #e9ebee;
+      padding: 10px; }
+      #root .chat .users .user:last-of-type {
+        display: none; }
+      #root .chat .users .user .fa-user {
+        color: #343a40; }
+    #root .chat .messages {
+      border-left: 1px solid #e9ebee;
+      overflow: auto;
+      height: 100%; }
+      #root .chat .messages .message {
         padding: 10px;
-        display: inline-flex; }
-        .container .messages .message__content span {
-          margin: 0;
-          padding-right: 10px;
-          color: blue;
-          font-weight: bold; }
-      .container .messages .message__buttons {
-        padding-bottom: 5px; }
-        .container .messages .message__buttons a {
-          margin: 0px 3px;
-          padding-top: 10px;
-          cursor: pointer;
+        display: block;
+        min-height: 50px;
+        height: auto !important;
+        clear: both; }
+        #root .chat .messages .message__buttons {
+          padding-bottom: 5px; }
+          #root .chat .messages .message__buttons a {
+            margin: 0px 3px;
+            padding-top: 10px;
+            cursor: pointer;
+            font-size: 10px;
+            color: dimgray;
+            letter-spacing: 0.05em; }
+        #root .chat .messages .message .time {
           font-size: 10px;
-          color: dimgray;
-          letter-spacing: 0.05em; }
-      .container .messages .message .time {
-        font-size: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        color: gray; }
-  .container .form {
-    width: 70%;
-    min-width: 300px;
-    max-width: 700px; }
-    .container .form form {
-      display: flex;
-      padding: 15px 0; }
-    .container .form input {
-      height: 30px;
-      padding-left: 10px;
-      border: 1px solid gray;
-      margin-right: 10px;
-      flex: 3; }
-      .container .form input:first-child {
-        flex: 1; }
-    .container .form button {
-      color: gray;
-      border-radius: 5px;
-      border: 1px solid gray; }
-    .container .form:hover {
-      cursor: pointer;
-      color: blue;
-      border-color: blue; }
+          padding-left: 5px;
+          padding-right: 5px;
+          color: gray; }
+        #root .chat .messages .message .username, #root .chat .messages .message .data {
+          display: inline-block;
+          float: left;
+          margin-right: 10px; }
+      #root .chat .messages .no-message {
+        margin: 10px; }
+    #root .chat .chatbox {
+      position: fixed;
+      bottom: 0px;
+      padding: 0px; }
+    #root .chat .btn-secondary {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0; }
