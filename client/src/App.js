@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
 import socketIOClient from 'socket.io-client';
+import 'bootstrap';
+// import 'font-awesome/css/font-awesome.css';
 import MessageList from './Components/MessageList';
 import MessageForm from './Components/MessageForm';
 import SignIn from './Components/SignIn';
@@ -164,7 +166,22 @@ class App extends Component {
 
     return (
       <React.Fragment>
-      <header>Liberty Mutual CRUDchat</header>
+      <nav className="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+                <a className="navbar-brand" href="#">FrankenChat</a>
+                <button className="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"/>
+                </button>
+
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav ml-auto">
+                        <li className="nav-item float-right">
+                            <a className="nav-link" target="_blank" href="https://github.com/waleedahmad">Github</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
       <section className="container">
 
         {this.state.chat_ready ? (
