@@ -180,7 +180,8 @@ class App extends Component {
                       </div>
                       </div>
                       <div className="form">
-                        <MessageForm 
+                        <MessageForm
+                          username={this.state.username}
                           author={this.state.author}
                           text={this.state.text}
                           handleChangeText={this.onChangeText}

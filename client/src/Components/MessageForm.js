@@ -6,9 +6,9 @@ const MessageForm = props => (
     <input
       type="text"
       name="author"
-      placeholder="Your name"
+      placeholder={props.username}
       className="form-control"
-      value={props.author}
+      value={props.username}
       onChange={props.handleChangeText}
     />
     <input
